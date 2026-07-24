@@ -1,0 +1,48 @@
+# example_strategy.yaml
+#
+# Illustrative strategy definition showing the declarative config surface the
+# engine consumes (StrategyConfig.from_dict). The VALUES here are placeholders
+# for documentation only — they are not a tuned or recommended configuration.
+# Production-tuned strategy configs are kept private (see README).
+
+strategy_name: example_strategy
+version: "0.0.0"
+
+setup:
+  type: breakout_reclaim            # breakout_reclaim | momentum_ignition
+  lookback_bars: 20                 # history window used to define the setup
+  breakout_threshold_pct: 0.005     # break confirmation margin above resistance
+
+  # --- fields consumed when type: momentum_ignition ---
+  surge_bars: 5
+  min_surge_pct: 0.03
+  min_volume_multiple: 3.0
+  min_consecutive_green: 3
+  max_extension_pct: 0.15
+
+filters:
+  min_liquidity_usd: 50000
+  max_spread_bps: 100
+  min_relative_volume: 1.5
+  regime_allowed: [medium, high]
+  min_time_since_launch_minutes: 60
+  max_concurrent_positions: 5
+  min_trades_last_hour: 60
+
+entry:
+  confirmation_bars: 1
+
+risk:
+  atr_multiple: 1.5                 # initial stop distance in ATRs
+
+exit:
+  take_profit_multiples: [1.618, 2.618, 4.236]   # Fibonacci extension targets
+  take_profit_portions: [0.50, 0.30, 0.20]       # portion sold at each target
+  trailing_stop_enabled: true
+  trailing_atr_multiplier_min: 4.0
+  trailing_atr_multiplier_max: 6.0
+  trailing_stop_floor_pct: 0.04
+  trailing_activates_after_r: 1.0
+  trailing_stop_confirmation_bars: 1
+  trailing_stop_hard_floor_atr: 3.0
+  time_stop_minutes: 90

@@ -1,0 +1,30 @@
+# example_session.yaml
+#
+# Illustrative live/paper session definition. Placeholder values for
+# documentation only — not a recommended configuration. Tuned session configs
+# are kept private (see README).
+#
+# A session binds a strategy config to a run mode and the session-level risk
+# envelope. `mode: paper` simulates fills; `mode: live` routes orders through
+# the execution adapter and additionally requires SOLANA_PRIVATE_KEY.
+
+session_name: example_session
+mode: paper                          # paper | live
+strategy: example_strategy           # references configs/strategies/example_strategy.yaml
+
+capital:
+  starting_usd: 1000
+  quote_asset: USDC
+
+risk:
+  max_risk_per_trade_pct: 0.5        # capital risked per trade
+  max_position_size_pct: 20.0        # hard cap: no single position above this % of capital
+  daily_max_drawdown_pct: 5.0        # halt the session at this drawdown
+  min_liquidity_hard_floor_usd: 1000
+  loss_streak_count: 3
+  loss_streak_cooldown_minutes: 30
+
+data:
+  chain: solana
+  bar_interval_seconds: 60
+  stale_data_max_age_seconds: 180
